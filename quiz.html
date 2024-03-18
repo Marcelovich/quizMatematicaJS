@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Quiz</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .erro {
+            color: #DF2935;
+            font-size: 18px;
+        }
+
+        .acerto {
+            color: #3772FF;
+            font-size: 18px;
+        }
+
+        body {
+            font-size: 18px;
+            font-family: "Montserrat", sans-serif;
+            font-optical-sizing: auto;
+            background-color: #080708;
+            color: #E6E8E6;
+        }
+
+        header {
+            background-color: #FDCA40;
+            text-align: center;
+            color: #080708;
+            margin: 25px 0px 25px 0px;
+        }
+
+        footer {
+            background-color: #FDCA40;
+            text-align: center;
+            color: #080708;
+            margin: 100px 0px 0px 0px;
+        }
+
+        ol {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ol h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        ol li {
+            margin-bottom: 5px;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        button {
+            font-family: "Montserrat", sans-serif;
+            margin-top: 10px;
+        }
+
+        .quiz {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+        #tempo {
+            transition: color 1.5s ease;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>Programação de Sítios Internet</header>
+
+    <div class="quiz">
+        <h1>Quiz Matemático</h1>
+        <h2 id="msgDesafio">Você tem 15 segundos para responder!</h2>
+        <h3>
+            <div id="tempo">Tempo: 15</div>
+        </h3>
+        <button id="botaoInicio" onclick="iniciar()">Iniciar</button>
+
+        <ol>
+            <h4> A) Resultado de √16?</h4>
+            <li><input type="radio" id="opcao1a" name="opcaoA" value="opcao1" disabled> 4 </li> <!--Correta-->
+            <li><input type="radio" id="opcao2a" name="opcaoA" value="opcao2" disabled> 2 </li>
+            <li><input type="radio" id="opcao3a" name="opcaoA" value="opcao3" disabled> 6 </li>
+            <li><input type="radio" id="opcao4a" name="opcaoA" value="opcao4" disabled> 8 </li>
+            <div type="text" id="corretaA" class="acerto"></div>
+            <div type="text" id="erradaA" class="erro"></div>
+        </ol>
+
+        <ol>
+            <h4> B) Resultado de 4 x 8?</h4>
+            <li><input type="radio" id="opcao1b" name="opcaoB" value="opcao5" disabled> 18 </li>
+            <li><input type="radio" id="opcao2b" name="opcaoB" value="opcao6" disabled> 34 </li>
+            <li><input type="radio" id="opcao3b" name="opcaoB" value="opcao7" disabled> 32 </li> <!--Correta-->
+            <li><input type="radio" id="opcao4b" name="opcaoB" value="opcao8" disabled> 42 </li>
+            <div type="text" id="corretaB" class="acerto"></div>
+            <div type="text" id="erradaB" class="erro"></div>
+        </ol>
+
+        <ol>
+            <h4> C) Resultado de 32 ÷ 4?</h4>
+            <li><input type="radio" id="opcao1c" name="opcaoC" value="opcao9" disabled> 6 </li>
+            <li><input type="radio" id="opcao2c" name="opcaoC" value="opcao10" disabled> 12 </li>
+            <li><input type="radio" id="opcao3c" name="opcaoC" value="opcao11" disabled> 10 </li>
+            <li><input type="radio" id="opcao4c" name="opcaoC" value="opcao12" disabled> 8 </li> <!--Correta-->
+            <div type="text" id="corretaC" class="acerto"></div>
+            <div type="text" id="erradaC" class="erro"></div>
+        </ol>
+
+        <button id="botaoEnviar" onclick="verificarRespostas()" disabled>Enviar</button>
+        <button id="botaoReiniciar" onclick="reiniciar()">Tentar Novamente</button>
+
+    </div>
+
+
+
+    <footer>3º Semestre</footer>
+
+    <script>
+
+
+
+
+        var segundos = 15;
+        var temporizador;
+
+        function iniciar() {
+            habilitarRadioButtonsEenviar();
+            desativarBotaoInicio();
+            coresTempo();
+            temporizador = setInterval(function () {
+                segundos--;
+                document.getElementById('tempo').innerHTML = "Tempo: " + segundos;
+                if (segundos == -1) {
+                    parar();
+                    document.getElementById('tempo').innerHTML = "Tempo acabou!";
+                    ocultar();
+                    desativarBotaoEnviar();
+                    verificarRespostas();
+                }
+            coresTempo();
+            }, 1000);
+        }
+
+        function coresTempo() {
+            var tempoElement = document.getElementById('tempo');
+            if (segundos > 10) {
+                tempoElement.style.color = "#3772FF"; // verde
+            } else if (segundos > 5) {
+                tempoElement.style.color = "#fdca40"; // laranja
+            } else {
+                tempoElement.style.color = "#DF2935"; // vermelho
+            }
+        }
+
+
+        function habilitarRadioButtonsEenviar() {
+            var radioButtons = document.querySelectorAll('input[type="radio"]');
+            var botaoEnviar = document.getElementById("botaoEnviar");
+            radioButtons.forEach(function (radio) {
+                radio.disabled = false; // Habilitar o radio button
+            });
+            botaoEnviar.disabled = false;
+        }
+
+        function reiniciar() {
+            window.location.reload();
+        }
+
+        function parar() {
+            clearInterval(temporizador);
+        }
+
+        function desativarBotaoInicio() {
+            var botaoInicio = document.getElementById("botaoInicio");
+            botaoInicio.style.display = "none";
+
+        }
+
+        function desativarBotaoEnviar() {
+            var botaoEnviar = document.getElementById("botaoEnviar");
+            botaoEnviar.disabled = true;
+        }
+
+
+        function ocultar() {
+            var msgDesafio = document.getElementById("msgDesafio");
+            var botaoEnviar = document.getElementById("botaoEnviar");
+            msgDesafio.style.display = "none";
+            botaoEnviar.style.display = "none";
+        }
+
+        function ocultarEnviar() {
+            var botaoEnviar = document.getElementById("botaoEnviar");
+            botaoEnviar.style.display = "none";
+        }
+
+        function ocultarTentarNovamente() {
+            var botaoReiniciar = document.getElementById("botaoReiniciar");
+            botaoReiniciar.style.display = "none";
+        }
+
+        function verificarRespostas() {
+            ocultarEnviar();
+            parar();
+            var msgAcerto1 = document.getElementById('corretaA');
+            var msgAcerto2 = document.getElementById('corretaB');
+            var msgAcerto3 = document.getElementById('corretaC');
+
+            var msgErro1 = document.getElementById('erradaA');
+            var msgErro2 = document.getElementById('erradaB');
+            var msgErro3 = document.getElementById('erradaC');
+
+            var opcao1a = document.getElementById("opcao1a").checked;
+            var opcao2a = document.getElementById("opcao2a").checked;
+            var opcao3a = document.getElementById("opcao3a").checked;
+            var opcao4a = document.getElementById("opcao4a").checked;
+
+            var opcao1b = document.getElementById("opcao1b").checked;
+            var opcao2b = document.getElementById("opcao2b").checked;
+            var opcao3b = document.getElementById("opcao3b").checked;
+            var opcao4b = document.getElementById("opcao4b").checked;
+
+            var opcao1c = document.getElementById("opcao1c").checked;
+            var opcao2c = document.getElementById("opcao2c").checked;
+            var opcao3c = document.getElementById("opcao3c").checked;
+            var opcao4c = document.getElementById("opcao4c").checked;
+
+            if (opcao1a) {
+                msgAcerto1.innerHTML = "Resposta correta";
+            } else if (opcao2a || opcao3a || opcao4a) {
+                msgErro1.innerHTML = "Resposta incorreta";
+            } else {
+                msgErro1.innerHTML = "Escolha uma resposta!";
+            }
+
+            if (opcao3b) {
+                msgAcerto2.innerHTML = "Resposta correta";
+            } else if (opcao1b || opcao2b || opcao4b) {
+                msgErro2.innerHTML = "Resposta incorreta";
+            } else {
+                msgErro2.innerHTML = "Escolha uma resposta!";
+            }
+
+            if (opcao4c) {
+                msgAcerto3.innerHTML = "Resposta correta";
+            } else if (opcao1c || opcao2c || opcao3c) {
+                msgErro3.innerHTML = "Resposta incorreta";
+            } else {
+                msgErro3.innerHTML = "Escolha uma resposta!";
+            }
+
+            if (opcao1a && opcao3b && opcao4c) {
+                ocultarTentarNovamente();
+            }
+        }
+
+    </script>
+</body>
+
+</html>
